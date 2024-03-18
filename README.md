@@ -4,7 +4,6 @@
 
 "ManageBankAccounts-Angular" is a frontend project developed using Angular 17, aimed at managing bank accounts with CRUD operations. Key features include:
 
-## Development server
 
   ⦁	CRUD Operations: Enables Create, Read, Update, and Delete operations for bank accounts.
   
