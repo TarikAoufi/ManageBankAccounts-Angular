@@ -1,0 +1,35 @@
+<div mat-dialog-title>Customer Form</div>
+<form [formGroup]="customerForm" (ngSubmit)="onFormSubmit()">
+    <div mat-dialog-content class="content">
+        <div class="row">
+            <mat-form-field  class="example-full-width">
+                <mat-label>Name</mat-label>
+                <input 
+                    matInput 
+                    type="text" 
+                    placeholder="Ex. ATT" 
+                    formControlName="name"
+                >
+                <mat-error *ngIf="f('name', 'required')">Name is required!</mat-error>
+                <mat-error *ngIf="f('name', 'pattern')">Name is invalid!</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="example-full-width">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" 
+                    placeholder="Ex. ATT@domaine.com" 
+                    formControlName="email"
+                >
+                <mat-error *ngIf="f('email', 'required')">Email is required!</mat-error>
+                <mat-error *ngIf="f('email', 'pattern')">Email format is invalid!</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div mat-dialog-actions class="action">
+        <button mat-raised-button color="warn" type="button" [mat-dialog-close]="false">Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!customerForm.valid">
+            {{data ? 'Update':'Save'}}
+        </button>
+    </div>
+</form>

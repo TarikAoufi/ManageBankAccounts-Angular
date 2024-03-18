@@ -1,0 +1,36 @@
+<mat-toolbar color="primary">
+    <span class="fill-remaining-space">
+      <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" (mouseover)="menuTrigger.openMenu()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" [overlapTrigger]="false">
+      <span (mouseleave)="menuTrigger.closeMenu()">
+        <button mat-menu-item routerLink="/">
+          <mat-icon>home</mat-icon>
+          <span>Home</span>
+    </button>
+    <button mat-menu-item routerLink="/customers">
+          <mat-icon>people_outline</mat-icon>
+          <span>Customers</span>
+        </button>
+     <button mat-menu-item (click)="openAddEditCustomerForm()" [disabled]="!isAddCustomerVisible">
+          <mat-icon>note_add</mat-icon>
+          <span>Add Customer</span>
+        </button>
+    <button mat-menu-item routerLink="/accounts">
+          <mat-icon>people</mat-icon>
+          <span>Account Operations</span>
+        </button>
+    <button mat-menu-item routerLink="/">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Logout</span>
+        </button>
+    </span>
+    </mat-menu>
+    </span>
+    <span class="fill-remaining-space">Manage Bank Accounts</span>
+    <span class="example-spacer"></span>
+    <button mat-raised-button color="warn" (click)="openAddEditCustomerForm()" [disabled]="!isAddCustomerVisible">
+        Add Customer
+    </button>
+  </mat-toolbar>

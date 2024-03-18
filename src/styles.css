@@ -1,0 +1,63 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+.line-break {
+  white-space: pre-line; /* Keeps line breaks */
+}
+
+mat-form-field{
+  width: 100%;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.main-body{
+  padding-top: 20px;
+  max-width: 1248px;
+  margin: 0 auto;
+}
+
+::ng-deep .mat-snack-bar-container {
+  background-color: #2196F3; /* Couleur de fond pour le succès */
+  color: #ffffff; /* Couleur du texte pour le succès */
+  border-radius: 4px; /* Coins arrondis */
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2); /* Ombre douce */
+  font-family: Arial, sans-serif; /* Police de caractères */
+  font-size: 14px; /* Taille de la police */
+}
+
+  .success-message {
+    background-color: #4CAF50; /* couleur de fond pour le succès */
+    color: #fff; /* couleur du texte pour le succès */
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .test {
+    --mdc-snackbar-container-color: aqua !important;
+    --mdc-snackbar-supporting-text-color: red !important;
+    --mat-snack-bar-button-color: #ff4081;
+  }
+
+  .custom-snackbar {
+    background-color: #2196F3; /* Couleur de fond pour le succès */
+    color: #ffffff; /* Couleur du texte pour le succès */
+    border-radius: 4px; /* Coins arrondis */
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2); /* Ombre douce */
+    font-family: Arial, sans-serif; /* Police de caractères */
+    font-size: 14px; /* Taille de la police */
+  }
+
+.custom-snackbar-success {
+  background-color: #28a745; 
+}
+
+.custom-snackbar-warning {
+  background-color: #ffc107; 
+}
+
+.custom-snackbar-error {
+  background-color: #ff0730; 
+}

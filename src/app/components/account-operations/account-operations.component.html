@@ -1,0 +1,216 @@
+<div class="container-fluid mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="text-center">Account Operations</h1>
+        </div>
+    </div>
+    <!-- Using the alert-message component -->
+    <app-alert-message
+        [errorMessage]="errorMessage"
+        [successMessage]="successMessage"
+        [warnMessage]="warnMessage"
+        (closeAlert)="closeAlert()">
+    </app-alert-message>
+
+    <div class="row">
+        <div class="col col-md-6">
+            <!-- ... Code for the "Accounts" section ... -->
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h3 class="card-title">Account Details</h3>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="accountFormGroup" (ngSubmit)="onSearchAccount()">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text">Account Id : </label>
+                            <input class="form-control" type="text" formControlName="accountId">
+                        </div>
+                        <div *ngIf="accountFormGroup.get('accountId')?.invalid && accountFormGroup.get('accountId')?.dirty"
+                            class="alert alert-danger">
+                            <div *ngIf="accountFormGroup.get('accountId')?.hasError('required')">Account Id is required!
+                            </div>
+                            <div *ngIf="accountFormGroup.get('accountId')?.hasError('pattern')">Account Id is invalid!
+                            </div>
+                        </div>
+
+                        <button [disabled]="!accountFormGroup.valid" class="btn btn-info">
+                            <i class="bi bi-search">Search</i>
+                        </button>
+
+                    </form>
+
+                    <ng-container *ngIf="accountDetails">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">Account Owner</h3>
+                                <div class="title-separator"></div>
+                                <div class="mb-3">
+                                    <label>ID : </label>
+                                    <label><strong> {{accountDetails.accountDto.customerDto.id}} </strong></label>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Name : </label>
+                                    <label><strong> {{accountDetails.accountDto.customerDto.name}} </strong></label>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Email : </label>
+                                    <label><strong> {{accountDetails.accountDto.customerDto.email}} </strong></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">Account Informations</h3>
+                                <div class="title-separator">
+                                    <div class="mb-3">
+                                        <label>Account ID : </label>
+                                        <label><strong>{{accountDetails.accountDto.id}}</strong></label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Balance : </label>
+                                        <label><strong>{{accountDetails.accountDto.balance}}</strong></label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Created On : </label>
+                                        <label><strong>{{commonService.formatDate(accountDetails.accountDto.createdOn)}}</strong></label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Status : </label>
+                                        <label><strong>{{accountDetails.accountDto.status}}</strong></label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Modified On : </label>
+                                        <label><strong>{{commonService.formatDate(accountDetails.accountDto.modifiedOn)}}</strong></label>
+                                    </div>
+                                    <ng-container
+                                        *ngIf="isCurrentAccount(accountDetails.accountDto); else savingsAccountTemplate">
+                                        <div class="mb-3">
+                                            <label>Overdraft Limit : </label>
+                                            <label>
+                                                <strong>{{ isCurrentAccount(accountDetails.accountDto) ?
+                                                    accountDetails.accountDto.overdraftLimit : '' }}
+                                                </strong>
+                                            </label>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #savingsAccountTemplate>
+                                        <div class="mb-3">
+                                            <label>Interest Rate : </label>
+                                            <label>
+                                                <strong>{{ isSavingsAccount(accountDetails.accountDto) ?
+                                                    accountDetails.accountDto.interestRate : '' }}
+                                                </strong>
+                                            </label>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="accountDetails.operationDtos.length!==0" class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">Account Operations</h3>
+                                <div class="title-separator">
+                                    <table class="table">
+                                        <thead>
+                                            <th>ID</th>
+                                            <th>OperationDate</th>
+                                            <th>Amount</th>
+                                            <th>OperationType</th>
+                                            <th>Description</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let op of accountDetails.operationDtos">
+                                                <td>{{op.id}}</td>
+                                                <td>{{commonService.formatDate(op.operationDate)}}</td>
+                                                <td>{{op.amount}}</td>
+                                                <td>{{op.operationType}}</td>
+                                                <td>{{op.description}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="nav nav-pills">
+                            <li *ngFor="let item of [].constructor(accountDetails.totalPage);let page=index">
+                                <a [ngClass]="page==currentPage?'btn-info':'btn-outline-info'" class="btn ms-1 mt-1"
+                                    (click)="viewPage(page)">{{page}}</a>
+                            </li>
+                        </ul>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <!-- ... Code for the "Operations" section ... -->
+            <div class="card" *ngIf="accountDetails">
+                <div class="card-header bg-success text-white">
+                    <h3 class="card-title">Operations</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" [formGroup]="operationFormGroup" (ngSubmit)="accountOperation()">
+                        <div class="form-group">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" formControlName="operationType" value="WITHDRAWAL" (change)="updateValidatorsForOperationType()">
+                                <label class="form-check-label">DEBIT:</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" formControlName="operationType" value="DEPOSIT" (change)="updateValidatorsForOperationType()">
+                                <label class="form-check-label">CREDIT:</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" formControlName="operationType" value="TRANSFER" (change)="updateValidatorsForOperationType()">
+                                <label class="form-check-label">TRANSFER:</label>
+                            </div>
+
+                            <div *ngIf="isSubmitted && operationTypeForm?.invalid" class="alert alert-danger">
+                                Please select operation type
+                            </div>                           
+                        </div>
+                        <div class="form-group" *ngIf="operationFormGroup.value.operationType=='TRANSFER'">
+                            <label>Destination Account:</label>
+                            <input
+                                type="text"
+                                formControlName="targetAccountId"
+                                class="form-control"
+                                [ngClass]="{ 'is-invalid': isSubmitted && f['targetAccountId'].errors }"
+                            />
+                            <div *ngIf="isSubmitted && f['targetAccountId'].errors" class="invalid-feedback">
+                                <div *ngIf="f['targetAccountId'].errors['required']">Destination account Id is required!</div>
+                                <div *ngIf="f['targetAccountId'].errors['pattern']">Destination account Id is invalid!</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount:</label>
+                            <input 
+                                type="text"
+                                placeholder="Enter amount with up to 2 decimal places using . or ," 
+                                formControlName="amount"
+                                class="form-control"
+                                [ngClass]="{ 'is-invalid': isSubmitted && f['amount'].errors }"    
+                            />
+                            <div *ngIf="isSubmitted && f['amount'].errors" class="invalid-feedback">
+                                <div *ngIf="f['amount'].errors['required']">Amount is required!</div>
+                                <div *ngIf="f['amount'].errors['pattern']">Amount is invalid!</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary">Save Operation</button>
+                            <button
+                              type="button"
+                              (click)="onReset()"
+                              class="btn btn-warning float-end"
+                            >
+                              Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,6 @@
+<div *ngIf="getMessage()" class="alert alert-dismissible fade show line-break" [ngClass]="getCssClass()">
+  <i [ngClass]="getIconClass()"></i>
+  <strong class="mx-2">{{ errorMessage || errorResponseJson ? 'Error!' : (warnMessage ? 'Warning!' : 'Success!') }}</strong>
+  <div [innerHTML]="getMessage()"></div>
+  <button type="button" class="btn-close" (click)="onClose()" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>

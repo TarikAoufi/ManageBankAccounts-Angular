@@ -1,0 +1,120 @@
+<!-- account-list.component.html -->
+<div class="main-body">
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Accounts List for {{selectedCustomerName}} customer</mat-card-title>
+        </mat-card-header>
+    </mat-card>
+    <!-- Using the alert-message component -->
+    <app-alert-message
+        [errorMessage]="errorMessage"
+        [successMessage]="successMessage"
+        [warnMessage]="warnMessage"
+        (closeAlert)="closeAlert()">
+    </app-alert-message>
+
+    <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+    </mat-form-field>
+
+    <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+            <!-- Account ID Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Account ID </th>
+                <td mat-cell *matCellDef="let account"> {{commonService.transform(account.id, 13)}} </td>
+            </ng-container>
+            <!-- Balance Column -->
+            <ng-container matColumnDef="balance">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Balance </th>
+                <td mat-cell *matCellDef="let account"> {{account.balance}} </td>
+            </ng-container>
+            <!-- Created On Column -->
+            <ng-container matColumnDef="createdOn">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Created On </th>
+                <td mat-cell *matCellDef="let account"> {{commonService.formatDate(account.createdOn)}} </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                <td mat-cell *matCellDef="let account"> {{account.status}} </td>
+            </ng-container>
+
+            <!-- Modified On Column -->
+            <ng-container matColumnDef="modifiedOn">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Modified On </th>
+                <td mat-cell *matCellDef="let account"> {{commonService.formatDate(account.modifiedOn)}} </td>
+            </ng-container>
+
+            <!-- Account Type Column -->
+            <ng-container matColumnDef="accountType">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Type </th>
+                <td mat-cell *matCellDef="let account">
+                    <ng-container *ngIf="isCurrentAccount(account); else savingsAccountTemplate">
+                        Current
+                    </ng-container>
+                    <ng-template #savingsAccountTemplate>
+                        Savings
+                    </ng-template>
+                </td>
+            </ng-container>
+
+            <!-- Overdraft Limit Column -->
+            <ng-container matColumnDef="overdraftLimit">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Overdraft Limit </th>
+                <td mat-cell *matCellDef="let account">
+                    {{ isCurrentAccount(account) ? account.overdraftLimit : '' }}
+                </td>
+            </ng-container>
+
+            <!-- Interest Rate Column -->
+            <ng-container matColumnDef="interestRate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Interest Rate </th>
+                <td mat-cell *matCellDef="let account">
+                    {{ isSavingsAccount(account) ? account.interestRate : '' }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                <td mat-cell *matCellDef="let account"> 
+                    <button mat-raised-button color="accent" class="bank-accounts" (click)="viewAccountOperations(account.id)"> 
+                        Operations
+                  </button>
+                </td>
+              </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let account; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+        </table>
+
+        <mat-paginator 
+            *ngIf="dataSource && dataSource.data && dataSource.data.length"
+            [pageSizeOptions]="pageSizeOptions" 
+            [pageSize]="pageSize" 
+            (page)="onPageChange($event)"
+            [length]="dataSource.data.length">
+        </mat-paginator>
+    </div>
+    <button 
+        mat-raised-button 
+        matTooltip="Back to Customers List" 
+        matTooltipClass="go-back-tooltip-uppercase"
+        aria-label="Button that shows a red tooltip" 
+        routerLink="/customers" class="go-back-button">
+        Go Back
+    </button>
+</div>
+
+<div>
+    <app-operation-list>
+    </app-operation-list>
+</div>

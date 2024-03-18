@@ -1,0 +1,23 @@
+/*
+.customer-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}*/
+
+.content{
+    padding-top: 10px;
+}
+
+.row{
+    display: flex;
+    gap: 10px;
+}
+
+.action{
+    padding: 0px 100px 20px;
+}
+
+button{
+    flex: 1;
+}

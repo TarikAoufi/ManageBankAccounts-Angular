@@ -1,0 +1,21 @@
+mat-card { 
+  flex: 1 1 auto;
+  margin-top: 10%;
+  margin-left: 25%;
+  margin-right: 20%;
+}
+
+p { 
+    flex: 1 1 auto;
+    font-size: 18px; 
+}
+
+.access-customer {
+    margin: 28px 8px 28px 0;
+    margin-left: 12%;
+}
+
+  .buffer {
+    margin-top: 12%;
+    margin-bottom: 4%;
+  }
