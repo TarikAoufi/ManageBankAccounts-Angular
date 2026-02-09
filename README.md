@@ -19,3 +19,4 @@
 ## Communication with Backend:
 
 This frontend project seamlessly communicates with the ManageBankAccounts-API backend microservice, enabling users to interact with bank account data efficiently.
+  
